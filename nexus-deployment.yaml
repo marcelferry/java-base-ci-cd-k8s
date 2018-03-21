@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nexus
+  namespace: nexus
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      containers:
+      - image: sonatype/nexus3
+        imagePullPolicy: Always
+        name: nexus
+        ports:
+        - containerPort: 8081
+        - containerPort: 5000
+        volumeMounts:
+          - mountPath: /nexus-data
+            name: nexus-data-volume
+      volumes:
+        - name: nexus-data-volume
+          persistentVolumeClaim:
+            claimName: nexus-pvc
