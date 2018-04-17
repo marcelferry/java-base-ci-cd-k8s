@@ -1,17 +1,14 @@
+kind: PersistentVolume
 apiVersion: v1
-kind: PersistentVolumeClaim
 metadata:
-  name: nexus-pvc
-  namespace: nexus
+  name: nexus-volume
   labels:
-    app: nexus
-  # For GluserFS only
-  annotations:
-    volume.beta.kubernetes.io/storage-class: glusterfs-storage
+    type: local
 spec:
+  storageClassName: manual
+  capacity:
+    storage: 8.8Gi
   accessModes:
     - ReadWriteOnce
-  resources:
-    requests:
-      # CHANGE ME
-      storage: 10Gi
+  hostPath:
+    path: "/mnt/nexus"
