@@ -54,3 +54,36 @@ export SERVICE_IP=$(kubectl get svc --namespace default cr-development-jenkins -
 echo http://$SERVICE_IP:8080/login
 
 
+git clone https://github.com/coderise-lab/k8s-sonarqube.git
+
+kubectl get nodes
+
+kubectl create secret generic postgres-pwd --from-literal=password=1a2b3c4d5e
+
+kubectl create -f sonar-pv-postgres.yaml     
+kubectl create -f sonar-pvc-postgres.yaml  
+kubectl create -f sonar-postgres-deployment.yaml  
+kubectl create -f sonarqube-deployment.yaml
+kubectl create -f sonarqube-service.yaml
+kubectl create -f sonar-postgres-service.yaml
+
+kubectl get po -o wide 
+
+kubectl get svc
+
+
+# NEXUS
+
+kubectl apply -f nexus-volume.yaml 
+
+helm install stable/sonatype-nexus --name registry
+
+kubectl get svc -w registry-sonatype-nexus
+
+export SERVICE_IP=$(kubectl get svc --namespace default registry-sonatype-nexus -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+echo http://$SERVICE_IP:8081
+
+
+
+
