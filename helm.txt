@@ -16,6 +16,10 @@ az aks get-credentials --name creditBRk8sCluster --resource-group creditBRk8sRes
 
 az acr create --resource-group creditBRk8sResourceGroup --name creditbrregistry --sku Basic
 
+az acr update -n creditbrregistry --admin-enabled true
+
+az acr credential show --name creditbrregistry --query passwords[0]
+
 # View nodes from your cluster
 kubectl get nodes
 
