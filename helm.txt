@@ -9,7 +9,7 @@ az login
 az group create --name creditBRk8sResourceGroup --location eastus
 
 # Create Kubernetes Cluster
-az aks create --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster --node-count 1 --generate-ssh-keys
+az aks create --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster --generate-ssh-keys
 
 # Configure kubectl cli to point to your cluster
 az aks get-credentials --name creditBRk8sCluster --resource-group creditBRk8sResourceGroup
@@ -39,7 +39,9 @@ helm init --upgrade
 
 git clone https://github.com/kubernetes/charts
 
-cd charts/
+cd charts/stable/jenkins
+
+vi values.yaml
 
 # Change InstallPlugins section
   InstallPlugins:
@@ -54,16 +56,56 @@ cd charts/
 
 helm install --name jenkins -f values.yaml .
 
+# Remove installed service
 helm delete jenkins
 helm del --purge jenkins
 
+# Jenkins instructions
+# Discover jenkins password
 printf $(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 
-'kubectl get svc --namespace default -w cr-development-jenkins'
+# Watch Jenkins service status
+kubectl get svc --namespace default -w jenkins
+
+# Get IP Address
 export SERVICE_IP=$(kubectl get svc --namespace default jenkins --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+
+# Access service
 echo http://$SERVICE_IP:8080/login
 
+# SONARQUBE
 
+helm install stable/sonarqube --name sonar
+
+# Watch Sonar service status
+kubectl get svc -w sonar-sonarqube
+
+# Get IP Address
+export SERVICE_IP=$(kubectl get svc --namespace default sonar-sonarqube -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+# Acess Service
+echo http://$SERVICE_IP:9000
+
+
+# NEXUS
+
+helm install stable/sonatype-nexus --name registry
+
+# Watch Sonar service status
+kubectl get svc -w registry-sonatype-nexus
+
+# Get IP Address
+export SERVICE_IP=$(kubectl get svc --namespace default registry-sonatype-nexus -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+# Acess Service
+echo http://$SERVICE_IP:8081
+
+
+# https://docs.microsoft.com/en-us/vsts/build-release/actions/integrate-jenkins-vsts-aks?view=vsts
+
+
+
+# Alternative
 git clone https://github.com/coderise-lab/k8s-sonarqube.git
 
 kubectl get nodes
@@ -84,18 +126,5 @@ kubectl get svc
 
 # NEXUS
 
-kubectl apply -f nexus-volume.yaml 
-
-helm install stable/sonatype-nexus --name registry
-
-kubectl get svc -w registry-sonatype-nexus
-
-export SERVICE_IP=$(kubectl get svc --namespace default registry-sonatype-nexus -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
-echo http://$SERVICE_IP:8081
-
-
-# https://docs.microsoft.com/en-us/vsts/build-release/actions/integrate-jenkins-vsts-aks?view=vsts
-
-
+kubectl apply -f nexus-volume.yaml
 
