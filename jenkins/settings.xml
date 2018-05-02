@@ -1,0 +1,64 @@
+<settings>
+  <!-- the path to the local repository - defaults to ~/.m2/repository
+  -->
+  <localRepository>~/.m2nrepo</localRepository>
+  <mirrors>
+    <mirror> <!--Send all requests to the public group -->
+      <id>nexus</id>
+      <mirrorOf>*</mirrorOf>
+      <url>http://52.170.215.39:8081/repository/maven-public</url>
+    </mirror>
+  </mirrors>
+  <activeProfiles>
+    <!--make the profile active all the time -->
+    <activeProfile>nexus</activeProfile>
+  </activeProfiles>
+  <profiles>
+    <profile>
+      <id>nexus</id>
+      <!--Override the repository (and pluginRepository) "central" from the Maven Super POM
+          to activate snapshots for both! -->
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+
+  <pluginGroups>
+    <pluginGroup>org.sonatype.plugins</pluginGroup>
+  </pluginGroups>
+ 
+  <servers>
+    <server>
+      <id>nexus</id>
+      <username>admin</username>
+      <password>Credit@2018!</password>
+    </server>
+    <server>
+      <id>creditbrregistry.azurecr.io</id>
+      <username>creditbrregistry</username>
+      <password>kJAYQFLLnLcWNU3ceZMc1Rr0RYfH/UFz</password>
+    </server>
+  </servers>
+</settings>
