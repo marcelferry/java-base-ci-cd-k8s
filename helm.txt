@@ -24,6 +24,9 @@ az acr update -n creditbrregistry --admin-enabled true
 # Show ACR password
 az acr credential show --name creditbrregistry --query passwords[0]
 
+# Set Registry Credentials to Kubernetes
+kubectl create secret docker-registry acrcredentials --docker-server=creditbrregistry.azurecr.io --docker-username=creditbrregistry --docker-password=kJAYQFLLnLcWNU3ceZMc1Rr0RYfH/UFz --docker-email=brq@creditbr.com.br
+
 # View nodes from your cluster
 kubectl get nodes
 
@@ -73,6 +76,9 @@ export SERVICE_IP=$(kubectl get svc --namespace default jenkins --template "{{ r
 # Access service
 echo http://$SERVICE_IP:8080/login
 
+# Create Aditional Volume
+kubectl apply -f jenkins/maven-volume-claim.yaml
+
 # SONARQUBE
 
 helm install stable/sonarqube --name sonar
@@ -99,6 +105,9 @@ export SERVICE_IP=$(kubectl get svc --namespace default registry-sonatype-nexus 
 
 # Acess Service
 echo http://$SERVICE_IP:8081
+
+# 
+kubectl create configmap maven-settings-xml --from-file=settings.xml
 
 
 # https://docs.microsoft.com/en-us/vsts/build-release/actions/integrate-jenkins-vsts-aks?view=vsts
