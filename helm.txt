@@ -112,6 +112,13 @@ kubectl create configmap maven-settings-xml --from-file=settings.xml
 
 # https://docs.microsoft.com/en-us/vsts/build-release/actions/integrate-jenkins-vsts-aks?view=vsts
 
+# Install Ingress
+helm install stable/nginx-ingress --namespace kube-system
+
+# Verify installl 
+kubectl get service -l app=nginx-ingress --namespace kube-system
+
+
 
 
 # Alternative
