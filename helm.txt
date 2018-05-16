@@ -138,6 +138,7 @@ az network public-ip update --resource-group $RESOURCEGROUP --name  $PIPNAME --d
 
 
 
+https://github.com/Azure/acs-engine/blob/master/docs/kubernetes/monitoring.md#grafana-and-influx-db
 
 # Alternative
 git clone https://github.com/coderise-lab/k8s-sonarqube.git
