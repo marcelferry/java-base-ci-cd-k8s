@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: creditbrdevops-ingress
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - creditbrdevops.eastus.cloudapp.azure.com
+    secretName: tls-secret
+  rules:
+  - host: creditbrdevops.eastus.cloudapp.azure.com
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: java-referencia-api
+          servicePort: 8080
+
