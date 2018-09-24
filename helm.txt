@@ -163,3 +163,5 @@ kubectl get svc
 
 kubectl apply -f nexus-volume.yaml
 
+kubectl autoscale deployment <svc> --cpu-percent=50 --min=1 --max=10 horizontalpodautoscaler.autoscaling/php-apache autoscaled
+
