@@ -165,3 +165,51 @@ kubectl apply -f nexus-volume.yaml
 
 kubectl autoscale deployment <svc> --cpu-percent=50 --min=1 --max=10 horizontalpodautoscaler.autoscaling/php-apache autoscaled
 
+
+Verify API
+
+kubectl api-versions
+
+Deve existir a opção: autoscaling/v2beta1
+
+Escalonar por percentual de API
+
+kubectl autoscale deployment <deployment-name> --min=2 --max=5 --cpu-percent=80
+
+kubectl get hpa
+
+kubectl get hpa/<deployment-name> -o yaml > <deployment-name>-hpa.yaml
+
+kubectl apply -f <deployment-name>-hpa.yaml
+
+
+
+
+Change from ClusterIP to NodePort
+
+kubectl -n default get service <deployment-name> -o yaml > deployment-name-svc.yaml
+
+sed 's/ClusterIP/NodePort/' deployment-name-svc.yaml > new-deployment-name-svc.yaml
+
+kubectl delete svc deployment-name
+
+kubectl create -f new-deployment-name-svc.yaml
+
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2alpha1
+metadata:
+name: sample-metrics-app-hpa
+spec:
+    scaleTargetRef:
+        kind: Deployment
+        name: sample-metrics-app
+    minReplicas: 2
+    maxReplicas: 10
+    metrics:
+    - type: Object
+    object:
+        target:
+        kind: Service
+        name: sample-metrics-app
+        metricName: http_request
+        targetValue: 100
