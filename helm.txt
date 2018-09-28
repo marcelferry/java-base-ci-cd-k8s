@@ -213,3 +213,5 @@ spec:
         name: sample-metrics-app
         metricName: http_request
         targetValue: 100
+
+helm install stable/nginx-ingress --namespace kube-system --set controller.service.loadBalancerIP="40.121.91.93" --set rbac.create=false
