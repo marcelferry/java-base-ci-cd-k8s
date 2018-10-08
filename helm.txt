@@ -11,7 +11,15 @@ az group create --name creditBRk8sResourceGroup --location eastus
 # Create Kubernetes Cluster
 az aks create --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster --generate-ssh-keys
 
+# Start Dashboard
 az aks browse --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster
+
+
+# Get Upgrades
+az aks get-upgrades --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster
+
+# Upgrade aks
+az aks upgrade --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster --kubernetes-version 1.9.10
 
 # Configure kubectl cli to point to your cluster
 az aks get-credentials --name creditBRk8sCluster --resource-group creditBRk8sResourceGroup
