@@ -14,7 +14,6 @@ az aks create --resource-group creditBRk8sResourceGroup --name creditBRk8sCluste
 # Start Dashboard
 az aks browse --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster
 
-
 # Get Upgrades
 az aks get-upgrades --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster
 
@@ -152,6 +151,10 @@ https://github.com/Azure/acs-engine/blob/master/docs/kubernetes/monitoring.md#gr
 
 # Alternative
 git clone https://github.com/coderise-lab/k8s-sonarqube.git
+
+# Upgrade Sonar
+helm upgrade sonar stable/sonarqube --set persistence.enabled=true,persistence.accessMode="ReadWriteOnce",persistence.size=8Gi
+
 
 kubectl get nodes
 
