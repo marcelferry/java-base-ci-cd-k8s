@@ -20,8 +20,13 @@ az aks get-upgrades --resource-group creditBRk8sResourceGroup --name creditBRk8s
 # Upgrade aks
 az aks upgrade --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster --kubernetes-version 1.9.10
 
+# Create aks
+az aks create --resource-group creditBRk8sResourceGroup --name creditBRk8sCluster2 --network-plugin azure --vnet-subnet-id <subnet-id> --docker-bridge-address 172.17.0.1/16 --dns-service-ip 10.2.0.10 --service-cidr 10.2.0.0/24
+
 # Configure kubectl cli to point to your cluster
 az aks get-credentials --name creditBRk8sCluster --resource-group creditBRk8sResourceGroup
+
+az aks get-credentials --name Creditbrcluster --resource-group creditBRk8sResourceGroup
 
 # Configure ACR Service
 # https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-acr#deploy-azure-container-registry
