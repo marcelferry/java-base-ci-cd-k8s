@@ -132,6 +132,8 @@ helm install stable/nginx-ingress --namespace kube-system
 # Verify installl 
 kubectl get service -l app=nginx-ingress --namespace kube-system
 
+helm install stable/kube-lego --namespace kube-system --set config.LEGO_EMAIL=YOUR_EMAIL,config.LEGO_URL=https://acme-v01.api.letsencrypt.org/directory
+
 # Create Script with
 #BEGIN
 #!/bin/bash
